@@ -16,7 +16,7 @@ public class SchedulerConfig {
     public void pingServer() {
         try {
             // 자신의 서버 URL로 ping
-            String serverUrl = "https://your-render-app-url.onrender.com/api/products";
+            String serverUrl = "https://shop-spring.onrender.com/api/products";
             restTemplate.getForObject(serverUrl, String.class);
             System.out.println("Ping sent successfully at: " + java.time.LocalDateTime.now());
         } catch (Exception e) {
