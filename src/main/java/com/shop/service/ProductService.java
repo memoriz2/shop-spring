@@ -35,7 +35,7 @@ public class ProductService {
     // 엔티티를 DTO로 변환
     private ProductResponseDTO convertToDTO(Product product) {
         ProductResponseDTO dto = new ProductResponseDTO();
-        dto.setId(product.getProductId());
+        dto.setProductId(product.getProductId());
         dto.setProductName(product.getProductName());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
