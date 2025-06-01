@@ -9,8 +9,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -22,8 +20,7 @@ public class SecurityConfig {
             .and()
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/api/**").permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().permitAll();
         return http.build();
     }
 
