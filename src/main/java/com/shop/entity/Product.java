@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -29,8 +30,10 @@ public class Product {
     @Column(nullable = false)
     private int stock;
 
-    @Column(name = "product_photo")
-    private String productPhoto;
+    @ElementCollection
+    @CollectionTable(name = "product_photos", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "photo_url")
+    private List<String> productPhoto;
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
