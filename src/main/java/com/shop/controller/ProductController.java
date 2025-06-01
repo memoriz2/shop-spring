@@ -1,7 +1,8 @@
 package com.shop.controller;
 
 import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +22,7 @@ import com.shop.service.ProductService;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
 
     @Autowired
@@ -31,7 +33,15 @@ public class ProductController {
     // 상품 등록
     @PostMapping
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO){
-        return ResponseEntity.ok(productService.createProduct(productDTO));
+        logger.info("Received product creation request: {}", productDTO);
+        try {
+            ProductResponseDTO response = productService.createProduct(productDTO);
+            logger.info("Product created successfully: {}", response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("Error creating product: ", e);
+            throw e;
+        }
     }
 
     // 상품 조회
