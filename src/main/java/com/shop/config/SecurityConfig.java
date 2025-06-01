@@ -18,26 +18,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors().and()
+            .cors().configurationSource(corsConfigurationSource())
+            .and()
             .csrf().disable()
             .authorizeRequests()
-            .anyRequest().permitAll();
+            .antMatchers("/api/**").permitAll()
+            .anyRequest().authenticated();
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-            "https://shop-tiqaktmxj.vercel.app",
-            "https://shop-tiqaktmxj-dfp3ekhhx-memoriz2s-projects.vercel.app"
-        ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addAllowedOrigin("https://shop-tiqaktmxj.vercel.app");
+        configuration.addAllowedOrigin("https://shop-tiqaktmxj-dfp3ekhhx-memoriz2s-projects.vercel.app");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 } 
