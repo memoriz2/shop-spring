@@ -1,7 +1,7 @@
 package com.shop.dto;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -11,7 +11,7 @@ public class ProductResponseDTO {
     private String description;
     private int price;
     private int stock;
-    private String productPhoto;
+    private List<String> productPhoto;
     private LocalDateTime createdAt; // 생성일
     private LocalDateTime updatedAt; // 수정일
 }
