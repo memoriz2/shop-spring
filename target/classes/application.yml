@@ -1,13 +1,13 @@
 spring:
     datasource:
-        url: jdbc:postgresql://db.fuhioaxgexonukldatsp.supabase.co:5432/postgres
-        username: postgres
+        url: jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres
+        username: postgres.fuhioaxgexonukldatsp
         password: 65y*MJeBXL9VDn-
         driver-class-name: org.postgresql.Driver
         hikari:
             maximum-pool-size: 1
             minimum-idle: 0
-            idle-timeout: 5000
+            idle-timeout: 600000
             connection-timeout: 5000
             max-lifetime: 180000
             leak-detection-threshold: 10000
