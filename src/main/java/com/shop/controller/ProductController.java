@@ -13,7 +13,7 @@ import com.shop.dto.ProductResponseDTO;
 import com.shop.service.ProductService;
 
 @RestController
-@RequestMapping(value = "/api/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("/api")
 @CrossOrigin(origins = {
     "https://shop-tiqaktmxj.vercel.app",
     "https://shop-tiqaktmxj-dfp3ekhhx-memoriz2s-projects.vercel.app"
@@ -28,13 +28,13 @@ public class ProductController {
     }
 
     // 헬스 체크용 엔드포인트
-    @GetMapping
+    @GetMapping("/products")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("API is running");
     }
 
     // 상품 등록
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/products", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO){
         logger.info("Received product creation request: {}", productDTO);
         try {
@@ -48,50 +48,50 @@ public class ProductController {
     }
 
     // 상품 조회
-    @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long productId){
-        return ResponseEntity.ok(productService.getProduct(productId));
+    @GetMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id){
+        return ResponseEntity.ok(productService.getProduct(id));
     }
 
     // 모든 상품 조회
-    @GetMapping
+    @GetMapping("/products")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts(){
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     // 상품 수정
-    @PutMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductRequestDTO productDTO){
-        return ResponseEntity.ok(productService.updateProduct(productId, productDTO));
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productDTO){
+        return ResponseEntity.ok(productService.updateProduct(id, productDTO));
     }
 
     // 상품 삭제
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId){
-        productService.deleteProduct(productId);
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+        productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
 
     // 상품명으로 검색
-    @GetMapping("/search/name/{productName}")
+    @GetMapping("/products/search/name/{productName}")
     public ResponseEntity<ProductResponseDTO> getProductByName(@PathVariable String productName){
         return ResponseEntity.ok(productService.getProductByName(productName));
     }
 
     // 가격 범위로 검색
-    @GetMapping("/search/price")
+    @GetMapping("/products/search/price")
     public ResponseEntity<List<ProductResponseDTO>> getProductsByPriceRange(@RequestParam int minPrice, @RequestParam int maxPrice){
         return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice));
     }
 
     // 재고가 있는 상품만 검색
-    @GetMapping("/search/stock")
+    @GetMapping("/products/search/stock")
     public ResponseEntity<List<ProductResponseDTO>> getProductInStock(){
         return ResponseEntity.ok(productService.getProductsInStock());
     }
 
     // 상품명으로 검색(부분 일치)
-    @GetMapping("/search")
+    @GetMapping("/products/search")
     public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword){
         return ResponseEntity.ok(productService.searchProducts(keyword));
     }
