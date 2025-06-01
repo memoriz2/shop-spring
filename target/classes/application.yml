@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:postgresql://db.fuhioaxgexonukldatsp.supabase.co:5432/postgres
+        url: jdbc:postgresql://db.fuhioaxgexonukldatsp.supabase.co:5432/postgres?user=postgres&password=65y*MJeBXL9VDn-
         username: postgres
         password: 65y*MJeBXL9VDn-
         driver-class-name: org.postgresql.Driver
