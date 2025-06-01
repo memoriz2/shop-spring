@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     // 헬스 체크용 엔드포인트
-    @GetMapping("/products")
+    @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("API is running");
     }
