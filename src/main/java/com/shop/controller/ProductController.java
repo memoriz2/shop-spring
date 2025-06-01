@@ -5,15 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.shop.dto.ProductRequestDTO;
 import com.shop.dto.ProductResponseDTO;
@@ -21,6 +13,10 @@ import com.shop.service.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = {
+    "https://shop-tiqaktmxj.vercel.app",
+    "https://shop-tiqaktmxj-dfp3ekhhx-memoriz2s-projects.vercel.app"
+})
 public class ProductController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
@@ -31,7 +27,7 @@ public class ProductController {
     }
 
     // 상품 등록
-    @PostMapping
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO){
         logger.info("Received product creation request: {}", productDTO);
         try {
