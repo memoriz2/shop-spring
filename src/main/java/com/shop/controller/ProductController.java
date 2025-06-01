@@ -1,9 +1,10 @@
 package com.shop.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,13 @@ import com.shop.service.ProductService;
 })
 public class ProductController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-    private final ProductService productService;
+    // private final ProductService productService;
 
-    @Autowired
-    public ProductController(ProductService productService){
-        this.productService = productService;
-        logger.info("ProductController initialized with mapping: /api/products");
-    }
+    // @Autowired
+    // public ProductController(ProductService productService){
+    //     this.productService = productService;
+    //     logger.info("ProductController initialized with mapping: /api/products");
+    // }
 
     // 헬스 체크용 엔드포인트
     @GetMapping("/health")
@@ -37,74 +38,93 @@ public class ProductController {
 
     // 상품 등록
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO){
+    public ResponseEntity<Map<String, String>> createProduct(@RequestBody ProductRequestDTO productDTO){
         logger.info("Received product creation request: {}", productDTO);
-        try {
-            ProductResponseDTO response = productService.createProduct(productDTO);
-            logger.info("Product created successfully: {}", response);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            logger.error("Error creating product: ", e);
-            throw e;
-        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product creation endpoint reached");
+        response.put("receivedData", productDTO.toString());
+        return ResponseEntity.ok(response);
     }
 
     // 상품 조회
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id){
+    public ResponseEntity<Map<String, String>> getProduct(@PathVariable Long id){
         logger.info("Getting product with id: {}", id);
-        return ResponseEntity.ok(productService.getProduct(id));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Get product endpoint reached");
+        response.put("id", id.toString());
+        return ResponseEntity.ok(response);
     }
 
     // 모든 상품 조회
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(){
+    public ResponseEntity<Map<String, String>> getAllProducts(){
         logger.info("Getting all products");
-        return ResponseEntity.ok(productService.getAllProducts());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Get all products endpoint reached");
+        return ResponseEntity.ok(response);
     }
 
     // 상품 수정
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productDTO){
+    public ResponseEntity<Map<String, String>> updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productDTO){
         logger.info("Updating product with id: {}", id);
-        return ResponseEntity.ok(productService.updateProduct(id, productDTO));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Update product endpoint reached");
+        response.put("id", id.toString());
+        response.put("receivedData", productDTO.toString());
+        return ResponseEntity.ok(response);
     }
 
     // 상품 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long id){
         logger.info("Deleting product with id: {}", id);
-        productService.deleteProduct(id);
-        return ResponseEntity.ok().build();
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Delete product endpoint reached");
+        response.put("id", id.toString());
+        return ResponseEntity.ok(response);
     }
 
     // 상품명으로 검색
     @GetMapping(value = "/search/name/{productName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponseDTO> getProductByName(@PathVariable String productName){
+    public ResponseEntity<Map<String, String>> getProductByName(@PathVariable String productName){
         logger.info("Searching product by name: {}", productName);
-        return ResponseEntity.ok(productService.getProductByName(productName));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Search by name endpoint reached");
+        response.put("productName", productName);
+        return ResponseEntity.ok(response);
     }
 
     // 가격 범위로 검색
     @GetMapping(value = "/search/price", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponseDTO>> getProductsByPriceRange(
+    public ResponseEntity<Map<String, String>> getProductsByPriceRange(
             @RequestParam int minPrice, 
             @RequestParam int maxPrice){
         logger.info("Searching products by price range: {} - {}", minPrice, maxPrice);
-        return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Search by price range endpoint reached");
+        response.put("minPrice", String.valueOf(minPrice));
+        response.put("maxPrice", String.valueOf(maxPrice));
+        return ResponseEntity.ok(response);
     }
 
     // 재고가 있는 상품만 검색
     @GetMapping(value = "/search/stock", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponseDTO>> getProductInStock(){
+    public ResponseEntity<Map<String, String>> getProductInStock(){
         logger.info("Getting products in stock");
-        return ResponseEntity.ok(productService.getProductsInStock());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Search in stock endpoint reached");
+        return ResponseEntity.ok(response);
     }
 
     // 상품명으로 검색(부분 일치)
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponseDTO>> searchProducts(@RequestParam String keyword){
+    public ResponseEntity<Map<String, String>> searchProducts(@RequestParam String keyword){
         logger.info("Searching products with keyword: {}", keyword);
-        return ResponseEntity.ok(productService.searchProducts(keyword));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Search by keyword endpoint reached");
+        response.put("keyword", keyword);
+        return ResponseEntity.ok(response);
     }
 }
