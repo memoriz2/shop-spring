@@ -11,7 +11,7 @@ spring:
             connection-timeout: 5000
             max-lifetime: 180000
             leak-detection-threshold: 10000
-            auto-commit: true
+            auto-commit: false
             connection-test-query: SELECT 1
             validation-timeout: 1000
             initialization-fail-timeout: 0
