@@ -13,6 +13,7 @@ import com.shop.dto.ProductRequestDTO;
 import com.shop.dto.ProductResponseDTO;
 import com.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/products")
@@ -38,9 +39,18 @@ public class ProductController {
 
     // 상품 등록
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO) {
-        logger.info("Received product creation request: {}", productDTO);
-        return ResponseEntity.ok(productService.createProduct(productDTO));
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequestDTO productDTO) {
+        try {
+            logger.info("Received product creation request: {}", productDTO);
+            ProductResponseDTO response = productService.createProduct(productDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            logger.error("DB 저장 중 예외 발생", e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "DB 저장 실패");
+            error.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
     }
 
     // 상품 조회
