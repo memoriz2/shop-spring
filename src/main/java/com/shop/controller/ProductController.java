@@ -27,6 +27,12 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // 헬스 체크용 엔드포인트
+    @GetMapping
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("API is running");
+    }
+
     // 상품 등록
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductRequestDTO productDTO){
