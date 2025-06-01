@@ -20,7 +20,10 @@ public class SecurityConfig {
             .and()
             .csrf().disable()
             .authorizeRequests()
-            .anyRequest().permitAll();
+            .antMatchers("/api/**").permitAll()
+            .anyRequest().permitAll()
+            .and()
+            .headers().frameOptions().disable();
         return http.build();
     }
 
