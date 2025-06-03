@@ -8,8 +8,12 @@ import com.shop.entity.Product;
 import com.shop.repository.ProductRepository;
 import com.shop.dto.ProductRequestDTO;
 import com.shop.dto.ProductResponseDTO;
+import com.shop.dto.PhotoInfoDTO;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -25,10 +29,21 @@ public class ProductService {
     private Product convertToEntity(ProductRequestDTO dto) {
         Product product = new Product();
         product.setProductName(dto.getProductName());
+        product.setThumbnail(dto.getThumbnail());
+        product.setThumbnailName(dto.getThumbnailName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
         product.setStock(dto.getStock());
-        product.setProductPhoto(dto.getProductPhoto());
+        
+        // PhotoInfoDTO 리스트를 Map으로 변환
+        Map<String, String> photoMap = new HashMap<>();
+        if (dto.getProductPhoto() != null) {
+            dto.getProductPhoto().forEach(photo -> 
+                photoMap.put(photo.getUrl(), photo.getFilename())
+            );
+        }
+        product.setProductPhoto(photoMap);
+        
         return product;
     }
 
@@ -37,10 +52,24 @@ public class ProductService {
         ProductResponseDTO dto = new ProductResponseDTO();
         dto.setProductId(product.getProductId());
         dto.setProductName(product.getProductName());
+        dto.setThumbnail(product.getThumbnail());
+        dto.setThumbnailName(product.getThumbnailName());
         dto.setDescription(product.getDescription());
         dto.setPrice(product.getPrice());
         dto.setStock(product.getStock());
-        dto.setProductPhoto(product.getProductPhoto());
+        
+        // Map을 PhotoInfoDTO 리스트로 변환
+        List<PhotoInfoDTO> photoList = new ArrayList<>();
+        if (product.getProductPhoto() != null) {
+            product.getProductPhoto().forEach((url, filename) -> {
+                PhotoInfoDTO photoInfo = new PhotoInfoDTO();
+                photoInfo.setUrl(url);
+                photoInfo.setFilename(filename);
+                photoList.add(photoInfo);
+            });
+        }
+        dto.setProductPhoto(photoList);
+        
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
         return dto;
@@ -72,10 +101,20 @@ public class ProductService {
             .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
         
         product.setProductName(productDTO.getProductName());
+        product.setThumbnail(productDTO.getThumbnail());
+        product.setThumbnailName(productDTO.getThumbnailName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
         product.setStock(productDTO.getStock());
-        product.setProductPhoto(productDTO.getProductPhoto());
+        
+        // PhotoInfoDTO 리스트를 Map으로 변환
+        Map<String, String> photoMap = new HashMap<>();
+        if (productDTO.getProductPhoto() != null) {
+            productDTO.getProductPhoto().forEach(photo -> 
+                photoMap.put(photo.getUrl(), photo.getFilename())
+            );
+        }
+        product.setProductPhoto(photoMap);
         
         return convertToDTO(productRepository.save(product));
     }

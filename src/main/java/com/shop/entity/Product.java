@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "products")
@@ -21,6 +23,12 @@ public class Product {
     @Column(name = "product_name", nullable = false)
     private String productName;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
+    @Column(name = "thumbnail_name")
+    private String thumbnailName;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -32,8 +40,9 @@ public class Product {
 
     @ElementCollection
     @CollectionTable(name = "product_photos", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "photo_url")
-    private List<String> productPhoto;
+    @MapKeyColumn(name = "photo_url")
+    @Column(name = "photo_name")
+    private Map<String, String> productPhoto = new HashMap<>();
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
